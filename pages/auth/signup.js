@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
+import { AppContext } from "@/config/global";
 import Head from "next/head";
 import Image from "next/image";
 import { TextField } from "@mui/material";
 import { FcGoogle } from 'react-icons/fc';
 import { FaApple } from 'react-icons/fa';
+import { useFormik } from "formik";
+import {signIn} from 'next-auth/react'
+import { useSession } from "next-auth/react";
 
 export default function Signup () {
     const [tab,setTab] = useState('buyer');
+    const {accountType,setAccountType} = useContext(AppContext);
+    const {data:session} = useSession();
+    console.log(session);
+    
+
+    const {handleBlur,handleChange,handleSubmit,touched,errors} = useFormik({
+        initialValues:{},
+        onsubmit: () =>{},
+        validationSchema:null,
+
+
+    })
 
     return (
         <>
         <Head>
+            <link rel="icon" href="AGROTRADE.png" />
             <title>Signup | AgroTrade</title>
         </Head>
         <main className="h-screen flex justify-center items-center py-20 px-3 md:px-0">
@@ -38,22 +55,8 @@ export default function Signup () {
 
                     <form>
                         <div className="mb-2">
-                            <TextField className="w-full" variant="outlined" label="first name"/>
+                            <TextField className="w-full" variant="outlined" label="Email"/>
                         </div>
-
-                        <div className="mb-2">
-                            <TextField className="w-full" variant="outlined" label="last name"/>
-                        </div>
-
-                        <div className="mb-2">
-                            <TextField className="w-full" type="email" variant="outlined" label="email"/>
-                        </div>
-
-                        {tab == 'farmer'
-                        ? <div className="mb-2">
-                            <TextField className="w-full" variant="outlined" label="company name"/>
-                        </div> 
-                        : null}
 
                         <button className="h-[48px] w-full flex justify-center items-center bg-green-700 text-white text-xl rounded-md">Register</button>
                     </form>
@@ -63,7 +66,7 @@ export default function Signup () {
 
                     {/* social signup */}
                     <div className="flex flex-col gap-3">
-                        <button 
+                        <button onClick={ () => signIn('google')}
                         className="h-[48px] flex justify-center items-center border border-slate-400 rounded-md text-slate-900">
                             <FcGoogle className="text-3xl mr-2"/> Sign up with Google
                         </button>
