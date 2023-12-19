@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import {Montserrat} from "next/font/google"
-import { useSession } from "next-auth/react"
+import { useSession,signOut} from "next-auth/react"
 import {CiUser} from 'react-icons/ci';
 
 const montserrat_500 = Montserrat({
@@ -12,6 +12,10 @@ export default function NavBar() {
     const {data:session} = useSession();
     const accountType = 'seller'
     console.log(session)
+
+    const logOut = async () => {
+        await signOut();
+    };
 
     
     return (
@@ -29,15 +33,15 @@ export default function NavBar() {
                         
                     </ul>
 
-                            {session ?
+                            {session ? <>
                             <Link href='/profile'>
-                                                    <Image width={48}
+                            <Image width={48}
                             height={48}
                             src = {session.user.image}
                             alt='profile image'
                             className="rounded-full"/>
-
                             </Link>
+                            </>
                             : 
                             <Link href="/auth/signup">
                                 singup
